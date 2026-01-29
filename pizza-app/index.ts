@@ -6,7 +6,7 @@ type Pizza = {
 
 type Order = {
   id: number,
-  pizza: Pizza, // Nested object type
+  pizza: Pizza,
   status: "ordered" | "completed"
 }
 
@@ -21,31 +21,6 @@ const menu: Pizza[] = [
   { id: globalPizzaId++, name: "Hawaiian", price: 10 },
   { id: globalPizzaId++, name: "Veggie", price: 9 },
 ];
-
-/**
- * Challenge part 1: Make it so we can use a global variable to track the nextPizzaId
- * and use the same trick we use with `nextOrderId++` when you're calling addNewPizza.
- * Update the menu items to use this as well so we don't have to manually enter ids 1-4
- * like we're currently doing
- */
-
-
-/**
- * Challenge part 1.5: Try to move the logic for adding an ID to the pizza objects 
- * inside the addNewPizza function, so that we can call addNewPizza with no id, and
- * the function will handle that part for us.
- * 
- * NOTE: you will run into TS warnings that we'll address soon, but the code should
- * still run.
- */
-
-
-/**
- * Challenge:
- * Fix the addNewPizza function using the Omit utility type. This might
- * require more than just changing the "Pizza" typed `pizzaObj` parameter.
- * Return the new pizza object (with the id added) from the function.
- */
 
 function addNewPizza(pizzaObj: Omit<Pizza, "id">): Pizza {
   const newPizza: Pizza = { id: globalPizzaId++, ...pizzaObj }
@@ -100,7 +75,8 @@ placeOrder("Pepperoni");
 completeOrder(1);
 completeOrder(3);
 
-// console.log("cashInRegister:", cashInRegister);
-// console.log("menu", menu);
-// console.log("orderQueue", orderQueue);
-// console.log(getPizzaDetail(1))
+console.log("Cash In Register:", cashInRegister);
+console.log("Menu:", menu);
+console.log("Order Queue: ", orderQueue);
+console.log(getPizzaDetail(7))
+console.log(getPizzaDetail("chilli"))
