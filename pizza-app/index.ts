@@ -1,17 +1,8 @@
-/**
- * Challenge: Create a Pizza object type. It should include a `name`
- * and a `price` property.
- */
-
 type Pizza = {
+  id: number
   name: string,
   price: number
 }
-
-/**
- * Challenge: Add an Order type. It should have `id`, `pizza`, and `status` properties.
- * Look through the code if you need a reminder as to what data types those should be.
- */
 
 type Order = {
   id: number,
@@ -20,24 +11,23 @@ type Order = {
 }
 
 const menu: Pizza[] = [
-  { name: "Margherita", price: 8 },
-  { name: "Pepperoni", price: 10 },
-  { name: "Hawaiian", price: 10 },
-  { name: "Veggie", price: 9 },
+  { id: 1, name: "Margherita", price: 8 },
+  { id: 2, name: "Pepperoni", price: 10 },
+  { id: 3, name: "Hawaiian", price: 10 },
+  { id: 4, name: "Veggie", price: 9 },
 ];
 
-let cashInRegister: number = 100;
+let cashInRegister = 100;
 let orderQueue: Order[] = [];
-let globalID: number = 1;
+let globalID = 1;
 
-/**
- * Challenge: teach TS that the pizzaObj is supposed to be a Pizza type.
- * Then like before, look through the code to see if there are any new
- * TS warnings to deal with (😉), and fix those issues
- */
 
 function addNewPizza(obj: Pizza) {
   menu.push(obj);
+}
+
+function setMenuId() {
+  return menu.length + 1
 }
 
 function placeOrder(pizzaName: string) {
@@ -67,23 +57,58 @@ function removePizzaFromQueue() {
 }
 
 
+/**
+ * Challenge: create a new utility function called getPizzaDetail. It will take
+ * a parameter called `identifier`, but there's a twist: we want this identifier
+ * to be allowed to either be the string name of the pizza (e.g. "Pepperoni"),
+ * OR to be the number ID of the pizza (e.g. 2).
+ * 
+ * Don't worry about the code inside the function yet, just create the function
+ * signature, making sure to teach TS that the `identifier` parameter is allowed
+ * to either be a string or a number.
+ */
 
-console.log("cashInRegister:", cashInRegister);
 
-addNewPizza({ name: "Chicken", price: 8 });
-addNewPizza({ name: "Chilli", price: 5 });
-addNewPizza({ name: "Paner", price: 6 });
-console.log("menu", menu);
+function getPizzaDetail(identifier: string | number) {
+  /**
+  * Challenge: write the code to check if the parameter is a string
+  * or a number, and use the menu.find() method accordingly
+  */
+  // let pizzaDetail;
+  if (typeof identifier === "string") {
+    return menu.find(obj => obj.name.toLowerCase() === identifier.toLowerCase())
+  } else if (typeof identifier === "number") {
+    return menu.find(obj => obj.id === identifier)
+  } else {
+    throw new TypeError("Parameter 'identifier' must be either a string or a number")
+  }
+  // if (!pizzaDetail) {
+  //   console.error(`Pizza not found with ${(typeof identifier === "string" ? "name" : "id")} "${identifier}"`)
+  //   return
+  // }
+  // return pizzaDetail
+}
+console.log(getPizzaDetail(1))
+
+// console.log("cashInRegister:", cashInRegister);
+
+addNewPizza({ id: setMenuId(), name: "Chicken", price: 8 });
+addNewPizza({ id: setMenuId(), name: "Chilli", price: 5 });
+addNewPizza({ id: setMenuId(), name: "Paner", price: 6 });
+// console.log("menu", menu);
 
 placeOrder("Veggie");
 placeOrder("Chilli");
 placeOrder("Pepperoni");
 
-console.log("orderQueue", orderQueue);
-
-console.log("cashInRegister:", cashInRegister);
+// console.log("orderQueue", orderQueue);
+// console.log("cashInRegister:", cashInRegister);
 
 completeOrder(1);
 completeOrder(3);
 
-console.log("orderQueue", orderQueue);
+// console.log("orderQueue", orderQueue);
+
+getPizzaDetail(1)
+getPizzaDetail("Chilli")
+// getPizzaDetail(34)
