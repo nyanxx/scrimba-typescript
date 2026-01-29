@@ -22,15 +22,15 @@ let orderQueue: Order[] = [];
 let globalID = 1;
 
 
-function addNewPizza(obj: Pizza) {
+function addNewPizza(obj: Pizza): void {
   menu.push(obj);
 }
 
-function setMenuId() {
+function setMenuId(): number {
   return menu.length + 1
 }
 
-function placeOrder(pizzaName: string) {
+function placeOrder(pizzaName: string): Order | undefined {
   const pizzaOrdered = menu.find((obj) => obj.name === pizzaName);
   if (!pizzaOrdered) {
     console.log(`${pizzaName} not found! can't place the order.`)
@@ -42,7 +42,7 @@ function placeOrder(pizzaName: string) {
   return newOrder;
 }
 
-function completeOrder(orderId: number) {
+function completeOrder(orderId: number): Order | undefined {
   const order = orderQueue.find((obj) => obj.id === orderId);
   if (!order) {
     console.error(`Order with id ${orderId} not found!`)
@@ -52,29 +52,11 @@ function completeOrder(orderId: number) {
   return order;
 }
 
-function removePizzaFromQueue() {
+function removePizzaFromQueue(): void {
   orderQueue = orderQueue.filter((obj) => obj.status !== "completed");
 }
 
-
-/**
- * Challenge: create a new utility function called getPizzaDetail. It will take
- * a parameter called `identifier`, but there's a twist: we want this identifier
- * to be allowed to either be the string name of the pizza (e.g. "Pepperoni"),
- * OR to be the number ID of the pizza (e.g. 2).
- * 
- * Don't worry about the code inside the function yet, just create the function
- * signature, making sure to teach TS that the `identifier` parameter is allowed
- * to either be a string or a number.
- */
-
-
-function getPizzaDetail(identifier: string | number) {
-  /**
-  * Challenge: write the code to check if the parameter is a string
-  * or a number, and use the menu.find() method accordingly
-  */
-  // let pizzaDetail;
+function getPizzaDetail(identifier: string | number): Pizza | undefined {
   if (typeof identifier === "string") {
     return menu.find(obj => obj.name.toLowerCase() === identifier.toLowerCase())
   } else if (typeof identifier === "number") {
@@ -82,13 +64,7 @@ function getPizzaDetail(identifier: string | number) {
   } else {
     throw new TypeError("Parameter 'identifier' must be either a string or a number")
   }
-  // if (!pizzaDetail) {
-  //   console.error(`Pizza not found with ${(typeof identifier === "string" ? "name" : "id")} "${identifier}"`)
-  //   return
-  // }
-  // return pizzaDetail
 }
-console.log(getPizzaDetail(1))
 
 // console.log("cashInRegister:", cashInRegister);
 
@@ -109,6 +85,6 @@ completeOrder(3);
 
 // console.log("orderQueue", orderQueue);
 
-getPizzaDetail(1)
-getPizzaDetail("Chilli")
-// getPizzaDetail(34)
+console.log(getPizzaDetail(1))
+console.log(getPizzaDetail("chilli"))
+console.log(getPizzaDetail(34))
