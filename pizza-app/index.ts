@@ -10,24 +10,47 @@ type Order = {
   status: "ordered" | "completed"
 }
 
-const menu: Pizza[] = [
-  { id: 1, name: "Margherita", price: 8 },
-  { id: 2, name: "Pepperoni", price: 10 },
-  { id: 3, name: "Hawaiian", price: 10 },
-  { id: 4, name: "Veggie", price: 9 },
-];
-
 let cashInRegister = 100;
 let orderQueue: Order[] = [];
-let globalID = 1;
+let globalOrderId = 1;
+let globalPizzaId = 1;
+
+const menu: Pizza[] = [
+  { id: globalPizzaId++, name: "Margherita", price: 8 },
+  { id: globalPizzaId++, name: "Pepperoni", price: 10 },
+  { id: globalPizzaId++, name: "Hawaiian", price: 10 },
+  { id: globalPizzaId++, name: "Veggie", price: 9 },
+];
+
+/**
+ * Challenge part 1: Make it so we can use a global variable to track the nextPizzaId
+ * and use the same trick we use with `nextOrderId++` when you're calling addNewPizza.
+ * Update the menu items to use this as well so we don't have to manually enter ids 1-4
+ * like we're currently doing
+ */
 
 
-function addNewPizza(obj: Pizza): void {
-  menu.push(obj);
-}
+/**
+ * Challenge part 1.5: Try to move the logic for adding an ID to the pizza objects 
+ * inside the addNewPizza function, so that we can call addNewPizza with no id, and
+ * the function will handle that part for us.
+ * 
+ * NOTE: you will run into TS warnings that we'll address soon, but the code should
+ * still run.
+ */
 
-function setMenuId(): number {
-  return menu.length + 1
+
+/**
+ * Challenge:
+ * Fix the addNewPizza function using the Omit utility type. This might
+ * require more than just changing the "Pizza" typed `pizzaObj` parameter.
+ * Return the new pizza object (with the id added) from the function.
+ */
+
+function addNewPizza(pizzaObj: Omit<Pizza, "id">): Pizza {
+  const newPizza: Pizza = { id: globalPizzaId++, ...pizzaObj }
+  menu.push(newPizza);
+  return newPizza
 }
 
 function placeOrder(pizzaName: string): Order | undefined {
@@ -37,7 +60,7 @@ function placeOrder(pizzaName: string): Order | undefined {
     return
   }
   cashInRegister = cashInRegister + pizzaOrdered.price;
-  const newOrder: Order = { id: globalID++, pizza: pizzaOrdered, status: "ordered" };
+  const newOrder: Order = { id: globalOrderId++, pizza: pizzaOrdered, status: "ordered" };
   orderQueue.push(newOrder);
   return newOrder;
 }
@@ -66,25 +89,18 @@ function getPizzaDetail(identifier: string | number): Pizza | undefined {
   }
 }
 
-// console.log("cashInRegister:", cashInRegister);
-
-addNewPizza({ id: setMenuId(), name: "Chicken", price: 8 });
-addNewPizza({ id: setMenuId(), name: "Chilli", price: 5 });
-addNewPizza({ id: setMenuId(), name: "Paner", price: 6 });
-// console.log("menu", menu);
+addNewPizza({ name: "Chicken", price: 8 });
+addNewPizza({ name: "Chilli", price: 5 });
+addNewPizza({ name: "Paner", price: 6 });
 
 placeOrder("Veggie");
 placeOrder("Chilli");
 placeOrder("Pepperoni");
 
-// console.log("orderQueue", orderQueue);
-// console.log("cashInRegister:", cashInRegister);
-
 completeOrder(1);
 completeOrder(3);
 
+// console.log("cashInRegister:", cashInRegister);
+// console.log("menu", menu);
 // console.log("orderQueue", orderQueue);
-
-console.log(getPizzaDetail(1))
-console.log(getPizzaDetail("chilli"))
-console.log(getPizzaDetail(34))
+// console.log(getPizzaDetail(1))
