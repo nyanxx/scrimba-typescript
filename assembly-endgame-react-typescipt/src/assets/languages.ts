@@ -1,11 +1,10 @@
-
 type Language = {
   name: string,
   backgroundColor: string
   fontColor: string
 }
 
-export default [
+export const languages: Language[] = [
   {
     name: "HTML",
     backgroundColor: "#E2680F",
@@ -51,4 +50,4 @@ export default [
     backgroundColor: "#2D519F",
     fontColor: "#F9F4DA",
   },
-] as Language[];
+];
