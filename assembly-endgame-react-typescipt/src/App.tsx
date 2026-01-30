@@ -1,35 +1,92 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import ReactConfetti from "react-confetti";
+import Header from "./components/Header";
+import GameStatus from "./components/GameStatus";
+import LanguageChips from "./components/LanguagesChips";
+import Word from "./components/Word";
+import Keyboard from "./components/Keyboard";
+import NewGameButton from "./components/NewGameButton";
+import AriaLiveSection from "./components/AriaLiveSection";
+import { languages } from "./assets/languages";
+import { getWord } from "./utils/utils";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  // State values
+  const [currentWord, setCurrentWord] = useState<string>((): string => getWord());
+  const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
+
+  // Derived values
+  const wrongGuessCount: number = guessedLetters.filter(
+    (letter) => !currentWord.includes(letter),
+  ).length;
+
+  const isGameLost: boolean = wrongGuessCount >= languages.length - 1;
+  const isGameWon: boolean = Array.from(currentWord).every((letter) =>
+    guessedLetters.includes(letter),
+  );
+  const isGameOver: boolean = isGameLost || isGameWon;
+  const recentLetter: string = guessedLetters[guessedLetters.length - 1];
+  const isRecentLetterCorrect: boolean = currentWord.includes(recentLetter);
+
+  // Functions
+  function addGuessedLetter(letter: string): void {
+    setGuessedLetters((prevArray) => {
+      return prevArray.includes(letter) ? prevArray : [...prevArray, letter];
+    });
+  }
+
+  function startNewGame(): void {
+    setCurrentWord(getWord());
+    setGuessedLetters([]);
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <main>
+      {isGameWon && <ReactConfetti recycle={false} numberOfPieces={1000} />}
 
-export default App
+      <Header />
+
+      <GameStatus
+        wrongGuessCount={wrongGuessCount}
+        languages={languages}
+        isGameOver={isGameOver}
+        isGameLost={isGameLost}
+        isGameWon={isGameWon}
+        isRecentLetterCorrect={isRecentLetterCorrect}
+      />
+
+      <LanguageChips
+        wrongGuessCount={wrongGuessCount}
+        languages={languages}
+      />
+
+      <Word
+        currentWord={currentWord}
+        isGameLost={isGameLost}
+        guessedLetters={guessedLetters}
+      />
+
+      <AriaLiveSection
+        isRecentLetterCorrect={isRecentLetterCorrect}
+        recentLetter={recentLetter}
+        languages={languages}
+        wrongGuessCount={wrongGuessCount}
+        currentWord={currentWord}
+        guessedLetters={guessedLetters}
+      />
+
+      <Keyboard
+        currentWord={currentWord}
+        guessedLetters={guessedLetters}
+        addGuessedLetter={addGuessedLetter}
+        isGameOver={isGameOver}
+      />
+
+      <NewGameButton
+        isGameOver={isGameOver}
+        startNewGame={startNewGame}
+      />
+
+    </main>
+  );
+}
