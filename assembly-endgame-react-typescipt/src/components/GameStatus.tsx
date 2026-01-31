@@ -1,6 +1,18 @@
+import type { JSX } from "react";
 import { getFarewellText } from "../utils/utils";
+import type { Language } from "../assets/languages";
 
-export default function GameStatus(props) {
+type GameStatusProps = {
+  wrongGuessCount: number,
+  languages: Language[],
+  isGameOver: boolean,
+  isGameLost: boolean,
+  isGameWon: boolean,
+  isRecentLetterCorrect: boolean
+}
+
+export default function GameStatus(props: GameStatusProps): JSX.Element {
+
   const backgroundColor: string = props.isGameLost
     ? "#BA2A2A"
     : props.isGameWon
@@ -23,12 +35,8 @@ export default function GameStatus(props) {
   }
 
   const display = decideDisplay();
-
-  const farewell: string = getFarewellText(
-    props.wrongGuessCount &&
-    props.wrongGuessCount < 9 &&
-    props.languages[props.wrongGuessCount - 1].name,
-  );
+  const languageName = props.wrongGuessCount && props.wrongGuessCount < 9 && props.languages[props.wrongGuessCount - 1].name
+  const farewell: string | null = (languageName) ? getFarewellText(languageName) : null;
 
   return (
     <section className="status-container" aria-live="polite" role="status">

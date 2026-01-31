@@ -1,5 +1,6 @@
 import { useState } from "react";
-import ReactConfetti from "react-confetti";
+import type { JSX } from "react";
+import ConfettiContainer from "./components/ConfettiContainer";
 import Header from "./components/Header";
 import GameStatus from "./components/GameStatus";
 import LanguageChips from "./components/LanguagesChips";
@@ -10,7 +11,7 @@ import AriaLiveSection from "./components/AriaLiveSection";
 import { languages } from "./assets/languages";
 import { getWord } from "./utils/utils";
 
-export default function App() {
+export default function App(): JSX.Element {
   // State values
   const [currentWord, setCurrentWord] = useState<string>((): string => getWord());
   const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
@@ -30,7 +31,7 @@ export default function App() {
 
   // Functions
   function addGuessedLetter(letter: string): void {
-    setGuessedLetters((prevArray) => {
+    setGuessedLetters((prevArray): string[] => {
       return prevArray.includes(letter) ? prevArray : [...prevArray, letter];
     });
   }
@@ -42,10 +43,8 @@ export default function App() {
 
   return (
     <main>
-      {isGameWon && <ReactConfetti recycle={false} numberOfPieces={1000} />}
-
+      <ConfettiContainer isGameWon={isGameWon} />
       <Header />
-
       <GameStatus
         wrongGuessCount={wrongGuessCount}
         languages={languages}
@@ -54,18 +53,15 @@ export default function App() {
         isGameWon={isGameWon}
         isRecentLetterCorrect={isRecentLetterCorrect}
       />
-
       <LanguageChips
         wrongGuessCount={wrongGuessCount}
         languages={languages}
       />
-
       <Word
         currentWord={currentWord}
         isGameLost={isGameLost}
         guessedLetters={guessedLetters}
       />
-
       <AriaLiveSection
         isRecentLetterCorrect={isRecentLetterCorrect}
         recentLetter={recentLetter}
@@ -74,19 +70,16 @@ export default function App() {
         currentWord={currentWord}
         guessedLetters={guessedLetters}
       />
-
       <Keyboard
         currentWord={currentWord}
         guessedLetters={guessedLetters}
         addGuessedLetter={addGuessedLetter}
         isGameOver={isGameOver}
       />
-
       <NewGameButton
         isGameOver={isGameOver}
         startNewGame={startNewGame}
       />
-
     </main>
   );
 }

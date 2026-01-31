@@ -1,4 +1,16 @@
-export default function AriaLiveSection(props) {
+import type { JSX } from "react";
+import type { Language } from "../assets/languages";
+
+type AriaLiveSectionProps = {
+    isRecentLetterCorrect: boolean
+    recentLetter: string
+    languages: Language[]
+    wrongGuessCount: number
+    currentWord: string
+    guessedLetters: string[]
+}
+
+export default function AriaLiveSection(props: AriaLiveSectionProps): JSX.Element {
     return (
         //  Combined visually-hidden aria-live region for status updates 
         <section className="sr-only" aria-live="polite" role="status">
@@ -12,7 +24,7 @@ export default function AriaLiveSection(props) {
                 Current word:
                 {props.currentWord
                     .split("")
-                    .map((letter) =>
+                    .map((letter: string): string =>
                         props.guessedLetters.includes(letter) ? letter + "." : "blank.",
                     )
                     .join(" ")}

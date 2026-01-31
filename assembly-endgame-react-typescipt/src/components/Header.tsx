@@ -1,4 +1,6 @@
-export default function Header() {
+import type { JSX } from "react";
+
+export default function Header(): JSX.Element {
     return (
         <header>
             <h1 className="heading">Assembly: Endgame</h1>

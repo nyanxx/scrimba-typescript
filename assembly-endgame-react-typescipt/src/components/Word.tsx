@@ -1,4 +1,12 @@
-export default function Word(props) {
+import type { JSX } from "react";
+
+type WordProps = {
+    currentWord: string
+    isGameLost: boolean
+    guessedLetters: string[]
+}
+
+export default function Word(props: WordProps): JSX.Element {
     const wordDisplay = props.currentWord.split("").map((letter: string, index: number) => {
         return !props.isGameLost ? (
             <div key={index} className={"alphabet"}>
