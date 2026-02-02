@@ -40,17 +40,17 @@ export const getPets = (req: Request<{}, unknown, {}, RequestQuery>, res: Respon
     if (filteredPets.length > 0) {
         res.json(filteredPets)
     } else {
-        res.status(404).json({ message: `no data found!` })
+        res.status(404).json({ message: `No pet data found!` })
     }
 }
 
 type RequestParam = { id: string }
-export const getPetByID = (req: Request<RequestParam>, res: Response<Pet | { message: "Not Found" }>): void => {
+export const getPetByID = (req: Request<RequestParam>, res: Response<Pet | { message: string }>): void => {
     const { id } = req.params
     const pet: Pet | undefined = pets.find((obj: Pet): boolean => obj.id === +id)
     if (pet) {
         res.json(pet)
     } else {
-        res.status(404).json({ message: "Not Found" })
+        res.status(404).json({ message: "No pet data found associated with that id" })
     }
 }
